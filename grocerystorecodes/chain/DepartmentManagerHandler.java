@@ -6,10 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Department Manager-level discount approval handler.
  * Can approve discounts up to 25%.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class DepartmentManagerHandler extends DiscountHandler {
     
