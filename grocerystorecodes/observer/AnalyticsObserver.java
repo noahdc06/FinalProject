@@ -6,10 +6,6 @@ import java.util.Map;
 /**
  * Observer that collects analytics data from grocery product events.
  * Tracks event counts, product statistics, and system performance metrics.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class AnalyticsObserver implements GroceryProductObserver {
     
