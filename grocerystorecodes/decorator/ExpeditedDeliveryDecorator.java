@@ -7,10 +7,6 @@ import com.university.grocerystore.model.GroceryProduct;
 /**
  * Decorator that adds expedited delivery functionality to products.
  * Increases the price and provides delivery time information.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class ExpeditedDeliveryDecorator extends ProductDecorator {
     
