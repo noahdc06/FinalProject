@@ -13,10 +13,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This class implements the GroceryComponent interface and can contain other GroceryComponent
  * objects, enabling recursive composition and unified treatment of individual products and bundles.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GroceryBundle implements GroceryComponent {
     
