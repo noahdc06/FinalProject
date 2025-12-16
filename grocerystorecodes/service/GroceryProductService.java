@@ -12,10 +12,6 @@ import com.university.grocerystore.repository.GroceryProductRepository;
  * 
  * <p>This service encapsulates business rules and coordinates between the domain layer
  * and the repository layer, maintaining clean separation of concerns.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GroceryProductService {
     
