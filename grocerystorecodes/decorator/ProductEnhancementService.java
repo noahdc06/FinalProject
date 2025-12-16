@@ -9,10 +9,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This service demonstrates the Decorator pattern in action by providing
  * a high-level interface for dynamically adding features to products.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class ProductEnhancementService {
     
