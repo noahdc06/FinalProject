@@ -31,10 +31,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * - Statistics tracking
  * - Warm-up and refresh capabilities
  * - Thread-safe operations
- * 
- * @author Navid Mohaghegh
- * @version 4.0
- * @since 2024-09-15
  */
 public class ModernSearchCache implements AutoCloseable {
     
