@@ -11,10 +11,6 @@ import com.university.grocerystore.model.Perishable;
 /**
  * Modern interface for polymorphic grocery store with async operations.
  * Extends the base GroceryStore with modern Java features.
- * 
- * @author Navid Mohaghegh
- * @version 4.0
- * @since 2024-09-15
  */
 public interface ModernGroceryStore extends GroceryStore {
     
