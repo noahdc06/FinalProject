@@ -12,10 +12,6 @@ import com.university.grocerystore.repository.GroceryProductRepository;
  * 
  * <p>This service combines the efficiency of Trie data structures for prefix searching
  * with LRU caching to avoid repeated computation for frequently accessed queries.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class CachedSearchService {
     
