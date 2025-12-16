@@ -7,10 +7,6 @@ package com.university.grocerystore.observer;
  * <p>This interface allows components to subscribe to grocery product events and be
  * automatically notified when events occur, enabling loose coupling between
  * the event source and event handlers.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public interface GroceryProductObserver {
     
