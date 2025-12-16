@@ -9,10 +9,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * <p>This interface defines the contract for all grocery product events, allowing
  * the system to broadcast domain events to interested observers without
  * tight coupling between components.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public interface GroceryProductEvent {
     
