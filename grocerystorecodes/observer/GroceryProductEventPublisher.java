@@ -15,10 +15,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This class demonstrates the Observer pattern by managing a list of observers
  * and broadcasting events to all registered observers when grocery product events occur.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GroceryProductEventPublisher implements GroceryProductSubject {
     
