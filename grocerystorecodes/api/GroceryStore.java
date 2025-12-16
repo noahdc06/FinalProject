@@ -29,10 +29,6 @@ import com.university.grocerystore.model.Perishable;
  *
  * <p>This interface extends the concept of a grocery store to handle
  * various types of grocery products using polymorphism.</p>
- *
- * @author Navid Mohaghegh
- * @version 2.0
- * @since 2024-09-15
  */
 public interface GroceryStore {
 
