@@ -16,10 +16,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This implementation provides O(1) average time complexity for get and put operations
  * by using a HashMap for O(1) lookups and a Deque for O(1) access order tracking.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class SearchResultCache {
     
