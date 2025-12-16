@@ -29,10 +29,6 @@ import com.university.grocerystore.model.GroceryProduct.ProductType;
  * 
  * <p>All operations delegate to the existing GroceryStore implementation,
  * maintaining the same business logic and validation rules.</p>
- * 
- * @author Navid Mohaghegh
- * @version 1.0
- * @since 2024-12-19
  */
 @RestController
 @RequestMapping("/api/products")
