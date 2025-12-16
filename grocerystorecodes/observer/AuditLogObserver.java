@@ -11,10 +11,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Observer that maintains an audit log of all grocery product events.
  * Provides a complete history of system activities for compliance and debugging.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class AuditLogObserver implements GroceryProductObserver {
     
