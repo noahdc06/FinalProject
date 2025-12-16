@@ -5,10 +5,6 @@ package com.university.grocerystore.repository;
  * 
  * <p>This exception wraps underlying storage-related exceptions and provides
  * a clean abstraction for the domain layer.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class RepositoryException extends RuntimeException {
     
