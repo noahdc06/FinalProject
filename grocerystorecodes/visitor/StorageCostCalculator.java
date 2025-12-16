@@ -17,10 +17,6 @@ import com.university.grocerystore.model.Perishable;
  * - Frozen items: $0.15 per day of shelf life
  * - Canned goods: $0.05 per day of shelf life
  * - Snacks: $0.08 per day of shelf life</p>
- * 
- * @author Navid Mohaghegh
- * @version 2.0
- * @since 2024-09-15
  */
 public class StorageCostCalculator implements GroceryProductVisitor {
     
