@@ -23,10 +23,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * - Thread-safe file operations with ReadWriteLock
  * - Better error handling and logging
  * - Atomic file operations to prevent corruption
- * 
- * @author Navid Mohaghegh
- * @version 4.0
- * @since 2024-09-15
  */
 public class ModernJsonGroceryProductRepository implements GroceryProductRepository, AutoCloseable {
     
