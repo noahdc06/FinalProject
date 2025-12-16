@@ -10,10 +10,6 @@ import com.university.grocerystore.model.Perishable;
  * Director class that orchestrates the construction of complex GroceryProduct objects
  * using various builders. Demonstrates the Director pattern in conjunction
  * with the Builder pattern for creating predefined configurations.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GroceryDirector {
     
