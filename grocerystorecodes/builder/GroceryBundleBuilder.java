@@ -11,10 +11,6 @@ import com.university.grocerystore.model.GroceryProduct;
 /**
  * Builder for creating GroceryBundle instances with a fluent interface.
  * Demonstrates the Builder pattern for complex composite object construction.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GroceryBundleBuilder implements ComponentBuilder<GroceryBundle> {
     
