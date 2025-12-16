@@ -6,10 +6,6 @@ import com.university.grocerystore.model.GroceryProduct;
 
 /**
  * Event that occurs when a grocery product is added to the system.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class ProductAddedEvent implements GroceryProductEvent {
     
