@@ -10,9 +10,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * construct complex objects step by step with a fluent interface.</p>
  * 
  * @param <T> the type of product being built
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public interface ProductBuilder<T extends GroceryProduct> {
     
