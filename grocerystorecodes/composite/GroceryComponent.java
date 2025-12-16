@@ -29,10 +29,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * double price = component.getPrice();
  * String info = component.getDisplayInfo();
  * }</pre>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  * @see GroceryLeaf
  * @see GroceryBundle
  * @see GroceryProduct
