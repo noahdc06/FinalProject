@@ -18,10 +18,6 @@ import com.university.grocerystore.model.GroceryItem;
  * arrays of grocery items, demonstrating array operations without using ArrayList.</p>
  * 
  * <p>All methods handle null arrays and null elements gracefully.</p>
- * 
- * @author Navid Mohaghegh
- * @version 1.0
- * @since 2024-09-15
  */
 public final class GroceryItemUtils {
     
