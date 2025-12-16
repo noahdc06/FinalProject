@@ -7,10 +7,6 @@ import com.university.grocerystore.model.GroceryProduct;
 /**
  * Decorator that adds gift wrapping functionality to products.
  * Increases the price and provides gift wrapping information.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GiftWrappingDecorator extends ProductDecorator {
     
