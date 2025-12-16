@@ -11,10 +11,6 @@ import com.university.grocerystore.model.GroceryProduct;
 /**
  * Observer that tracks inventory changes for grocery products.
  * Maintains counts and statistics for products in the system.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class InventoryObserver implements GroceryProductObserver {
     
