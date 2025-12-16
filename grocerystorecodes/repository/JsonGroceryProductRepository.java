@@ -17,10 +17,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This adapter implements the GroceryProductRepository port, providing JSON file-based
  * persistence without the domain layer knowing about the storage mechanism.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class JsonGroceryProductRepository implements GroceryProductRepository {
     
