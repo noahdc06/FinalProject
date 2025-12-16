@@ -10,9 +10,6 @@ import com.university.grocerystore.composite.GroceryComponent;
  * construct complex objects step by step with a fluent interface.</p>
  * 
  * @param <T> the type of component being built
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public interface ComponentBuilder<T extends GroceryComponent> {
     
