@@ -6,10 +6,6 @@ package com.university.grocerystore.chain;
  * 
  * <p>This class provides the basic structure for the chain of responsibility,
  * allowing handlers to either process requests or pass them to the next handler.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public abstract class DiscountHandler {
     
