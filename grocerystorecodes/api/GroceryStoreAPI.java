@@ -10,10 +10,6 @@ import com.university.grocerystore.model.GroceryItem;
  * search functionality, and analytics.
  * 
  * <p>Implementations should ensure thread-safety if concurrent access is expected.</p>
- * 
- * @author Navid Mohaghegh
- * @version 1.0
- * @since 2024-09-15
  */
 public interface GroceryStoreAPI {
     
