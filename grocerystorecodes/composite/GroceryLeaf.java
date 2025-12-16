@@ -11,10 +11,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This class wraps a GroceryProduct object and implements the GroceryComponent interface,
  * allowing individual products to be treated uniformly with composite bundles.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class GroceryLeaf implements GroceryComponent {
     
