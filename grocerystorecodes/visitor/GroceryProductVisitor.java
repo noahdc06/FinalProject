@@ -12,10 +12,6 @@ import com.university.grocerystore.model.Snack;
  * 
  * <p>This pattern is particularly useful for operations that need
  * to behave differently based on the concrete type of GroceryProduct.</p>
- * 
- * @author Navid Mohaghegh
- * @version 2.0
- * @since 2024-09-15
  */
 public interface GroceryProductVisitor {
     
