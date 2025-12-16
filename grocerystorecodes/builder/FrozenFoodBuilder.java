@@ -7,10 +7,6 @@ import com.university.grocerystore.model.Perishable;
 /**
  * Builder for creating FrozenFood instances with a fluent interface.
  * Demonstrates the Builder pattern for complex object construction.
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class FrozenFoodBuilder implements ProductBuilder<FrozenFood> {
     
