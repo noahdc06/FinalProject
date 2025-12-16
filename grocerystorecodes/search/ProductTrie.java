@@ -15,10 +15,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This implementation stores products at each node along the path, allowing for
  * efficient prefix-based lookups and autocomplete functionality.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class ProductTrie {
     
