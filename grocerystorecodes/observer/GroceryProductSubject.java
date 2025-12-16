@@ -6,10 +6,6 @@ package com.university.grocerystore.observer;
  * 
  * <p>This interface allows components to manage observers and broadcast events,
  * enabling the Observer pattern for loose coupling between event sources and handlers.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public interface GroceryProductSubject {
     
