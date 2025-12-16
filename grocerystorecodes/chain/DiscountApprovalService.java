@@ -15,10 +15,6 @@ import com.university.grocerystore.model.GroceryProduct;
  * 
  * <p>This service demonstrates the Chain of Responsibility pattern by creating
  * a hierarchy of approval handlers and processing requests through the chain.</p>
- * 
- * @author Navid Mohaghegh
- * @version 3.0
- * @since 2024-09-15
  */
 public class DiscountApprovalService {
     
