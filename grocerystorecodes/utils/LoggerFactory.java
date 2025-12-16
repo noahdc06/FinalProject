@@ -6,10 +6,6 @@ import org.slf4j.Logger;
  * Factory for creating SLF4J loggers with consistent configuration.
  * This utility class provides a centralized way to create loggers
  * throughout the application.
- * 
- * @author Security Team
- * @version 1.0
- * @since 2025-09-07
  */
 public final class LoggerFactory {
     
