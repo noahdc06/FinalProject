@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.impl;  
+package com.university.grocerystorecodes.model;  
 
 import com.university.grocerystorecodes.model.GroceryProduct;
 
@@ -67,3 +67,4 @@ public class ShoppingCartNode {
     }
 
 }
+
