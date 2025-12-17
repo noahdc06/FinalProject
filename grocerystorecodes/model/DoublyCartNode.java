@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.datastructures;
+package com.university.grocerystorecodes.impl;  
 
 import com.university.grocerystorecodes.model.GroceryProduct;
 
@@ -65,4 +65,5 @@ public class ShoppingCartNode {
         return String.format("ShoppingCartNode[%s x%d = $%.2f]", 
             product.getName(), quantity, getTotalPrice());
     }
+
 }
