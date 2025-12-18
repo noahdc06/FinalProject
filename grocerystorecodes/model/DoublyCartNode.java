@@ -14,6 +14,9 @@ package com.university.grocerystorecodes.model;
  * 
  */
    
+package com.university.grocerystorecodes.datastructures;
+
+import com.university.grocerystorecodes.model.GroceryProduct;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -92,13 +95,6 @@ public class DoublyCartNode {
     public void setQuantity(int quantity) { 
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
         this.quantity = quantity; 
-    }
-    
-    /**
-     * @return Total price
-     */
-    public double getTotalPrice() {
-        return product.getPrice() * quantity;
     }
     
     /**
