@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.iterator;
+package com.university.grocerystore.iterator;
 
 import org.junit.jupiter.api.Test;
 import com.university.grocerystore.model.*;
