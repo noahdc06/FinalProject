@@ -3,7 +3,6 @@ package com.university.grocerystore.model;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
 /**
  * Doubly linked list implementation for a shopping cart containing grocery products.
  * Supports efficient insertion/removal from both ends and bidirectional traversal.
@@ -33,8 +32,12 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
      * Adds a product to the beginning of the cart with specified quantity.
      * @param product The grocery product to add
      * @param quantity The quantity of the product (must be positive)
+     * @throws IllegalArgumentException if quantity <= 0
      */
     public void addFirst(GroceryProduct product, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive: " + quantity);
+        }
         DoublyCartNode newNode = new DoublyCartNode(product, quantity);
         if (head == null) {
             head = tail = newNode;
@@ -58,8 +61,12 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
      * Adds a product to the end of the cart with specified quantity.
      * @param product The grocery product to add
      * @param quantity The quantity of the product (must be positive)
+     * @throws IllegalArgumentException if quantity <= 0
      */
     public void addLast(GroceryProduct product, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive: " + quantity);
+        }
         DoublyCartNode newNode = new DoublyCartNode(product, quantity);
         if (head == null) {
             head = tail = newNode;
@@ -130,18 +137,23 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
     private boolean removeNode(DoublyCartNode node) {
         if (node == null) return false;
         
+        // Update previous node's next pointer
         if (node.getPrev() != null) {
             node.getPrev().setNext(node.getNext());
         } else {
+            // Node is head, update head reference
             head = node.getNext();
         }
         
+        // Update next node's previous pointer
         if (node.getNext() != null) {
             node.getNext().setPrev(node.getPrev());
         } else {
+            // Node is tail, update tail reference
             tail = node.getPrev();
         }
         
+        // Clear node's references to help garbage collection
         node.setNext(null);
         node.setPrev(null);
         size--;
@@ -149,26 +161,36 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
     }
     
     /**
-     * @return The first node in the cart
+     * Gets the first node in the cart.
+     * @return The first node, or null if cart is empty
      */
-    public DoublyCartNode getFirst() { return head; }
+    public DoublyCartNode getFirst() { 
+        return head; 
+    }
     
     /**
-     * @return The last node in the cart
+     * Gets the last node in the cart.
+     * @return The last node, or null if cart is empty
      */
-    public DoublyCartNode getLast() { return tail; }
+    public DoublyCartNode getLast() { 
+        return tail; 
+    }
     
     /**
-     * @return The number of items in the cart
+     * Gets the number of items in the cart.
+     * @return The size of the cart
      */
-    public int size() { return size; }
+    public int size() { 
+        return size; 
+    }
     
     /**
+     * Checks if the cart is empty.
      * @return true if the cart is empty, false otherwise
      */
-    public boolean isEmpty() { return size == 0; }
-    
-    
+    public boolean isEmpty() { 
+        return size == 0; 
+    }
     
     /**
      * Checks if the cart contains a product with the specified ID.
@@ -179,13 +201,18 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         return findNode(productId) != null;
     }
     
-
-    
-    
     /**
      * Removes all items from the cart.
      */
     public void clear() {
+        // Clear all node references to help garbage collection
+        DoublyCartNode current = head;
+        while (current != null) {
+            DoublyCartNode next = current.getNext();
+            current.setNext(null);
+            current.setPrev(null);
+            current = next;
+        }
         head = tail = null;
         size = 0;
     }
@@ -206,13 +233,13 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
             
             @Override
             public DoublyCartNode next() {
-                if (!hasNext()) throw new NoSuchElementException();
+                if (!hasNext()) {
+                    throw new NoSuchElementException("No more elements in cart");
+                }
                 DoublyCartNode node = current;
                 current = current.getNext();
                 return node;
             }
-        };
+        }
     }
 }
-
-
