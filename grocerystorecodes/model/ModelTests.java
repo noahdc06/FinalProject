@@ -414,9 +414,6 @@ public class ModelTests {
     @Test
     void testProductDiscount() {
         GroceryProduct discountedApple = new Produce("P005", "Discounted Apple", 2.0, 2024);
-        // Assuming GroceryProduct has getDiscountedPrice() method
-        // double discountedPrice = discountedApple.getDiscountedPrice();
-        // assertTrue(discountedPrice <= 2.0);
     }
     
     @Test
@@ -434,10 +431,7 @@ public class ModelTests {
     
     @Test
     void testModelImmutability() {
-        // Test that product fields are immutable (if designed that way)
-        // Most fields should be final and only accessible via getters
         assertThrows(UnsupportedOperationException.class, () -> {
-            // Try to modify a final field if reflection is used
         });
     }
 }
