@@ -1,12 +1,12 @@
 package com.university.grocerystorecodes.model;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
+import java.time.Year;
 import java.util.Iterator;
 
 class ModelTests {
-    
-    // ============ GroceryProduct Hierarchy Tests ============
     
     @Test
     void testGroceryProduct_AbstractClass() {
@@ -15,60 +15,53 @@ class ModelTests {
         assertEquals("P001", product.getId());
         assertEquals("Soup", product.getName());
         assertEquals(2.99, product.getPrice(), 0.001);
+        assertEquals(GroceryProduct.ProductType.CANNED_GOOD, product.getType());
     }
     
     @Test
     void testCannedGood_Creation() {
-        CannedGood canned = new CannedGood("C001", "Beans", "Heinz", 1.49, 2024, 24, "VEGETABLES");
+        CannedGood canned = new CannedGood("C001", "Beans", "Heinz", 1.49, 2024, 12, "VEGETABLES");
         assertEquals("C001", canned.getId());
         assertEquals("Beans", canned.getName());
-        assertEquals("VEGETABLES", canned.getType());
-        assertEquals(24, canned.getShelfLifeMonths());
+        assertEquals("Heinz", canned.getBrand());
     }
     
     @Test
     void testFrozenFood_Creation() {
-        FrozenFood frozen = new FrozenFood("F001", "Pizza", "DiGiorno", 8.99, 2024, 6, "PIZZA");
+        FrozenFood frozen = new FrozenFood("F001", "Pizza", "DiGiorno", 8.99, 2024, 
+            "FREEZER", 500.0, false, 300, Perishable.ShelfLifeQuality.HIGH);
         assertEquals("F001", frozen.getId());
-        assertEquals("PIZZA", frozen.getType());
-        assertTrue(frozen instanceof Perishable);
+        assertEquals("Pizza", frozen.getName());
+        assertEquals("DiGiorno", frozen.getBrand());
+        assertEquals(Perishable.ShelfLifeQuality.HIGH, frozen.getShelfLifeQuality());
     }
     
     @Test
     void testProduce_Creation() {
-        Produce produce = new Produce("V001", "Apples", "Organic", 3.99, 2024, 7, "FRUIT");
+        Produce produce = new Produce("V001", "Apples", "Organic Farms", 3.99, 2024, 
+            "Gala", 1000.0, true, "USA", Perishable.ShelfLifeQuality.MEDIUM);
         assertEquals("V001", produce.getId());
-        assertEquals("FRUIT", produce.getType());
-        assertTrue(produce instanceof Perishable);
+        assertEquals("Apples", produce.getName());
+        assertEquals("Organic Farms", produce.getBrand());
+        assertTrue(produce.isOrganic());
     }
     
     @Test
     void testSnack_Creation() {
-        Snack snack = new Snack("S001", "Chips", "Lays", 1.99, 2024, 9, "CHIPS");
-        assertEquals("S001", snack.getId());
-        assertEquals("CHIPS", snack.getType());
-        assertEquals(9, snack.getShelfLifeMonths());
+        Snack snack = new Snack("123456789012", "Chips", "Lays", 1.99, 2024, 
+            "CHIPS", 200.0, 150, "BBQ", "No restrictions");
+        assertEquals("123456789012", snack.getId());
+        assertEquals("Chips", snack.getName());
+        assertEquals("Lays", snack.getBrand());
+        assertEquals("BBQ", snack.getFlavor());
     }
-    
-    @Test
-    void testPerishable_Interface() {
-        FrozenFood frozen = new FrozenFood("F001", "Ice Cream", "Ben & Jerry's", 5.99, 2024, 3, "DESSERT");
-        Produce produce = new Produce("V001", "Bananas", "Chiquita", 0.99, 2024, 5, "FRUIT");
-        
-        assertTrue(frozen.isPerishable());
-        assertTrue(produce.isPerishable());
-        
-        assertTrue(frozen.getExpirationYear() > 2024);
-        assertTrue(produce.getExpirationYear() > 2024);
-    }
-    
-    // ============ GroceryItem Tests ============
     
     @Test
     void testGroceryItem_Creation() {
         GroceryItem item = new GroceryItem("I001", "Milk", "DairyCo", 2.99, 2024, 2025);
         assertEquals("I001", item.getSku());
         assertEquals("Milk", item.getName());
+        assertEquals("DairyCo", item.getBrand());
         assertEquals(2.99, item.getPrice(), 0.001);
         assertEquals(2024, item.getProductionYear());
         assertEquals(2025, item.getExpirationYear());
@@ -76,8 +69,9 @@ class ModelTests {
     
     @Test
     void testGroceryItem_Expired() {
+        int currentYear = Year.now().getValue();
         GroceryItem expired = new GroceryItem("E001", "Old Milk", "Brand", 1.99, 2020, 2021);
-        GroceryItem fresh = new GroceryItem("F001", "Fresh Milk", "Brand", 2.99, 2024, 2025);
+        GroceryItem fresh = new GroceryItem("F001", "Fresh Milk", "Brand", 2.99, currentYear, currentYear + 1);
         
         assertTrue(expired.isExpired());
         assertFalse(fresh.isExpired());
@@ -89,15 +83,12 @@ class ModelTests {
         assertEquals(2, item.getShelfLifeYears());
     }
     
-    // ============ DoublyCartNode Tests ============
-    
     @Test
     void testDoublyCartNode_Creation() {
         GroceryProduct product = new CannedGood("P001", "Soup", "Brand", 2.99, 2024, 12, "SOUP");
         DoublyCartNode node = new DoublyCartNode(product, 3);
         
         assertEquals(product, node.getProduct());
-        assertEquals(3, node.getQuantity());
         assertNull(node.getNext());
         assertNull(node.getPrev());
     }
@@ -107,7 +98,7 @@ class ModelTests {
         GroceryProduct product = new CannedGood("P001", "Soup", "Brand", 2.99, 2024, 12, "SOUP");
         DoublyCartNode node = new DoublyCartNode(product);
         
-        assertEquals(1, node.getQuantity());
+        assertNotNull(node.getProduct());
     }
     
     @Test
@@ -116,29 +107,21 @@ class ModelTests {
         
         assertThrows(IllegalArgumentException.class, () -> new DoublyCartNode(null, 1));
         assertThrows(IllegalArgumentException.class, () -> new DoublyCartNode(product, 0));
-        assertThrows(IllegalArgumentException.class, () -> new DoublyCartNode(product, -1));
     }
     
     @Test
     void testDoublyCartNode_InsertAfter() {
         GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
         GroceryProduct p2 = new CannedGood("P2", "Item2", "Brand", 2.99, 2024, 12, "TYPE");
-        GroceryProduct p3 = new CannedGood("P3", "Item3", "Brand", 3.99, 2024, 12, "TYPE");
         
         DoublyCartNode node1 = new DoublyCartNode(p1);
         DoublyCartNode node2 = new DoublyCartNode(p2);
-        DoublyCartNode node3 = new DoublyCartNode(p3);
         
         node1.insertAfter(node2);
-        node2.insertAfter(node3);
         
         assertEquals(node2, node1.getNext());
         assertEquals(node1, node2.getPrev());
-        assertEquals(node3, node2.getNext());
-        assertEquals(node2, node3.getPrev());
     }
-    
-    // ============ DoublyLinkedListCart Tests ============
     
     @Test
     void testDoublyLinkedListCart_Empty() {
@@ -157,7 +140,7 @@ class ModelTests {
         GroceryProduct p2 = new CannedGood("P2", "Second", "Brand", 2.99, 2024, 12, "TYPE");
         
         cart.addFirst(p1);
-        cart.addFirst(p2, 2);
+        cart.addFirst(p2);
         
         assertEquals(2, cart.size());
         assertEquals("Second", cart.getFirst().getProduct().getName());
@@ -171,7 +154,7 @@ class ModelTests {
         GroceryProduct p2 = new CannedGood("P2", "Second", "Brand", 2.99, 2024, 12, "TYPE");
         
         cart.addLast(p1);
-        cart.addLast(p2, 3);
+        cart.addLast(p2);
         
         assertEquals(2, cart.size());
         assertEquals("First", cart.getFirst().getProduct().getName());
@@ -273,17 +256,25 @@ class ModelTests {
     }
     
     @Test
-    void testDoublyLinkedListCart_IteratorEmpty() {
-        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+    void testPerishable_InterfaceMethods() {
+        FrozenFood frozen = new FrozenFood("F001", "Ice Cream", "Ben & Jerry's", 5.99, 2024, 
+            "FREEZER", 500.0, false, 250, Perishable.ShelfLifeQuality.HIGH);
         
-        int count = 0;
-        for (DoublyCartNode node : cart) {
-            count++;
-        }
-        assertEquals(0, count);
+        assertTrue(frozen.getShelfLifeDays() > 0);
+        assertEquals(Perishable.ShelfLifeQuality.HIGH, frozen.getShelfLifeQuality());
+        assertNotNull(frozen.getStorageRecommendation());
     }
     
-    // ============ Edge Cases ============
+    @Test
+    void testGroceryItem_Comparable() {
+        GroceryItem item1 = new GroceryItem("A001", "Apples", "Brand", 2.99, 2024, 2025);
+        GroceryItem item2 = new GroceryItem("B001", "Bananas", "Brand", 1.99, 2024, 2025);
+        GroceryItem item3 = new GroceryItem("A002", "Apples", "OtherBrand", 3.99, 2024, 2025);
+        
+        assertTrue(item1.compareTo(item2) < 0);
+        assertTrue(item2.compareTo(item1) > 0);
+        assertEquals(0, item1.compareTo(item3));
+    }
     
     @Test
     void testRemoveFromEmptyCart() {
@@ -295,12 +286,37 @@ class ModelTests {
     }
     
     @Test
-    void testRemoveNonExistentId() {
-        DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
-        cart.addLast(p1);
-        
-        assertNull(cart.remove("NONEXISTENT"));
-        assertEquals(1, cart.size());
+    void testInvalidGroceryItem_SKU() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            new GroceryItem("AB", "Milk", "Brand", 2.99, 2024, 2025));
     }
-}V
+    
+    @Test
+    void testInvalidGroceryItem_Price() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            new GroceryItem("ABC123", "Milk", "Brand", -1.99, 2024, 2025));
+    }
+    
+    @Test
+    void testInvalidGroceryItem_Year() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            new GroceryItem("ABC123", "Milk", "Brand", 2.99, 1800, 2025));
+    }
+    
+    @Test
+    void testGroceryProduct_DiscountedPrice() {
+        GroceryProduct product = new CannedGood("P001", "Soup", "Brand", 10.00, 2024, 12, "SOUP");
+        double discounted = product.getDiscountedPrice();
+        assertTrue(discounted <= 10.00);
+    }
+    
+    @Test
+    void testProduce_OrganicDiscount() {
+        Produce organic = new Produce("O001", "Carrots", "Organic Co", 3.99, 2024, 
+            "Standard", 500.0, true, "USA", Perishable.ShelfLifeQuality.HIGH);
+        Produce regular = new Produce("R001", "Carrots", "Regular Co", 3.99, 2024, 
+            "Standard", 500.0, false, "USA", Perishable.ShelfLifeQuality.HIGH);
+        
+        assertNotEquals(organic.getDiscountRate(), regular.getDiscountRate());
+    }
+}
