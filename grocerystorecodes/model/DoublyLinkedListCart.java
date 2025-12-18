@@ -12,17 +12,36 @@ package com.university.grocerystorecodes.model;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Doubly linked list implementation for a shopping cart containing grocery products.
+ * Supports efficient insertion/removal from both ends and bidirectional traversal.
+ */
 public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
     private DoublyCartNode head;
     private DoublyCartNode tail;
     private int size;
     
+    /**
+     * Constructs an empty shopping cart.
+     */
     public DoublyLinkedListCart() {
         head = tail = null;
         size = 0;
     }
     
-    // Add methods
+    /**
+     * Adds a product to the beginning of the cart with default quantity (1).
+     * @param product The grocery product to add
+     */
+    public void addFirst(GroceryProduct product) {
+        addFirst(product, 1);
+    }
+    
+    /**
+     * Adds a product to the beginning of the cart with specified quantity.
+     * @param product The grocery product to add
+     * @param quantity The quantity of the product (must be positive)
+     */
     public void addFirst(GroceryProduct product, int quantity) {
         DoublyCartNode newNode = new DoublyCartNode(product, quantity);
         if (head == null) {
@@ -35,6 +54,19 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         size++;
     }
     
+    /**
+     * Adds a product to the end of the cart with default quantity (1).
+     * @param product The grocery product to add
+     */
+    public void addLast(GroceryProduct product) {
+        addLast(product, 1);
+    }
+    
+    /**
+     * Adds a product to the end of the cart with specified quantity.
+     * @param product The grocery product to add
+     * @param quantity The quantity of the product (must be positive)
+     */
     public void addLast(GroceryProduct product, int quantity) {
         DoublyCartNode newNode = new DoublyCartNode(product, quantity);
         if (head == null) {
@@ -47,7 +79,10 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         size++;
     }
     
-    // Remove methods
+    /**
+     * Removes and returns the first product in the cart.
+     * @return The removed grocery product, or null if cart is empty
+     */
     public GroceryProduct removeFirst() {
         if (head == null) return null;
         GroceryProduct product = head.getProduct();
@@ -55,6 +90,10 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         return product;
     }
     
+    /**
+     * Removes and returns the last product in the cart.
+     * @return The removed grocery product, or null if cart is empty
+     */
     public GroceryProduct removeLast() {
         if (tail == null) return null;
         GroceryProduct product = tail.getProduct();
@@ -62,6 +101,11 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         return product;
     }
     
+    /**
+     * Removes the product with the specified ID from the cart.
+     * @param productId The ID of the product to remove
+     * @return The removed grocery product, or null if not found
+     */
     public GroceryProduct remove(String productId) {
         DoublyCartNode node = findNode(productId);
         if (node == null) return null;
@@ -70,7 +114,11 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         return product;
     }
     
-    // Find and remove helpers
+    /**
+     * Finds a node containing a product with the specified ID.
+     * @param productId The ID of the product to find
+     * @return The node containing the product, or null if not found
+     */
     private DoublyCartNode findNode(String productId) {
         DoublyCartNode current = head;
         while (current != null) {
@@ -82,60 +130,78 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         return null;
     }
     
-    private void removeNode(DoublyCartNode node) {
-        if (node == null) return;
+    /**
+     * Removes a specific node from the linked list.
+     * @param node The node to remove
+     * @return true if the node was successfully removed, false otherwise
+     */
+    private boolean removeNode(DoublyCartNode node) {
+        if (node == null) return false;
         
-        if (node == head) head = node.getNext();
-        if (node == tail) tail = node.getPrev();
+        if (node.getPrev() != null) {
+            node.getPrev().setNext(node.getNext());
+        } else {
+            head = node.getNext();
+        }
         
-        if (node.getPrev() != null) node.getPrev().setNext(node.getNext());
-        if (node.getNext() != null) node.getNext().setPrev(node.getPrev());
+        if (node.getNext() != null) {
+            node.getNext().setPrev(node.getPrev());
+        } else {
+            tail = node.getPrev();
+        }
         
         node.setNext(null);
         node.setPrev(null);
         size--;
+        return true;
     }
     
-    // Getters
+    /**
+     * @return The first node in the cart
+     */
     public DoublyCartNode getFirst() { return head; }
+    
+    /**
+     * @return The last node in the cart
+     */
     public DoublyCartNode getLast() { return tail; }
+    
+    /**
+     * @return The number of items in the cart
+     */
     public int size() { return size; }
+    
+    /**
+     * @return true if the cart is empty, false otherwise
+     */
     public boolean isEmpty() { return size == 0; }
     
-    // Price calculations
-    public double getTotal() {
-        double total = 0;
-        DoublyCartNode current = head;
-        while (current != null) {
-            total += current.getTotalPrice();
-            current = current.getNext();
-        }
-        return total;
-    }
     
-    // Quantity operations
+    
+    /**
+     * Checks if the cart contains a product with the specified ID.
+     * @param productId The ID of the product to search for
+     * @return true if the cart contains the product, false otherwise
+     */
     public boolean contains(String productId) {
         return findNode(productId) != null;
     }
     
-    public int getQuantity(String productId) {
-        DoublyCartNode node = findNode(productId);
-        return node != null ? node.getQuantity() : 0;
-    }
+
     
-    public boolean updateQuantity(String productId, int quantity) {
-        DoublyCartNode node = findNode(productId);
-        if (node == null) return false;
-        node.setQuantity(quantity);
-        return true;
-    }
     
+    /**
+     * Removes all items from the cart.
+     */
     public void clear() {
         head = tail = null;
         size = 0;
     }
     
-    // Iterator
+    /**
+     * Returns an iterator over the nodes in the cart from first to last.
+     * @return An iterator for forward traversal of the cart
+     */
     @Override
     public Iterator<DoublyCartNode> iterator() {
         return new Iterator<DoublyCartNode>() {
@@ -154,38 +220,5 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
                 return node;
             }
         };
-    }
-    
-    // Reverse iterator (doubly linked bonus)
-    public Iterator<DoublyCartNode> reverseIterator() {
-        return new Iterator<DoublyCartNode>() {
-            private DoublyCartNode current = tail;
-            
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-            
-            @Override
-            public DoublyCartNode next() {
-                if (!hasNext()) throw new NoSuchElementException();
-                DoublyCartNode node = current;
-                current = current.getPrev();
-                return node;
-            }
-        };
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Cart[");
-        DoublyCartNode current = head;
-        while (current != null) {
-            sb.append(current.toString());
-            if (current.getNext() != null) sb.append(" <-> ");
-            current = current.getNext();
-        }
-        sb.append("]");
-        return sb.toString();
     }
 }
