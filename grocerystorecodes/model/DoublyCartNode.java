@@ -2,8 +2,9 @@ package com.university.grocerystore.model;
 
 
 /**
- * Node for linked list implementation of shopping cart.
- * Demonstrates fundamental linked list data structure principles.
+/**
+ * Doubly linked list node for shopping cart containing grocery products.
+ * Each node holds a product with quantity and maintains references to adjacent nodes.
  * 
  * Time Complexity Analysis:
  * - Insertion: O(1) at head/tail (with tail reference)
@@ -17,10 +18,6 @@ package com.university.grocerystore.model;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- * Doubly linked list node for shopping cart containing grocery products.
- * Each node holds a product with quantity and maintains references to adjacent nodes.
- */
 public class DoublyCartNode {
     private final GroceryProduct product;
     private DoublyCartNode next;
@@ -102,4 +99,5 @@ public class DoublyCartNode {
         }
     }
 }
+
 
