@@ -14,6 +14,8 @@ package com.university.grocerystorecodes.model;
  * 
  */
    
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class DoublyCartNode {
     private final GroceryProduct product;
@@ -21,32 +23,95 @@ public class DoublyCartNode {
     private DoublyCartNode prev;
     private int quantity;
     
+    /**
+     * @param product The grocery product
+     * @param quantity The quantity
+     */
     public DoublyCartNode(GroceryProduct product, int quantity) {
+        if (product == null || quantity <= 0) {
+            throw new IllegalArgumentException("Invalid product or quantity");
+        }
         this.product = product;
         this.quantity = quantity;
+        this.next = null;
+        this.prev = null;
     }
     
-    public GroceryProduct getProduct() { 
-        return product; }
-    public DoublyCartNode getNext() { 
-        return next; }
-    public void setNext(DoublyCartNode next) { 
-        this.next = next; }
-    public DoublyCartNode getPrev() { 
-        return prev; }
-    public void setPrev(DoublyCartNode prev) {
-        this.prev = prev; }
-    public int getQuantity() { 
-        return quantity; }
-    public void setQuantity(int quantity) { 
-        this.quantity = quantity; }
+    /**
+     * @param product The grocery product
+     */
+    public DoublyCartNode(GroceryProduct product) {
+        this(product, 1);
+    }
     
+    /**
+     * @return The grocery product
+     */
+    public GroceryProduct getProduct() { 
+        return product; 
+    }
+    
+    /**
+     * @return The next node
+     */
+    public DoublyCartNode getNext() { 
+        return next; 
+    }
+    
+    /**
+     * @param next The next node
+     */
+    public void setNext(DoublyCartNode next) { 
+        this.next = next; 
+    }
+    
+    /**
+     * @return The previous node
+     */
+    public DoublyCartNode getPrev() { 
+        return prev; 
+    }
+    
+    /**
+     * @param prev The previous node
+     */
+    public void setPrev(DoublyCartNode prev) { 
+        this.prev = prev; 
+    }
+    
+    /**
+     * @return The quantity
+     */
+    public int getQuantity() { 
+        return quantity; 
+    }
+    
+    /**
+     * @param quantity The new quantity
+     */
+    public void setQuantity(int quantity) { 
+        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
+        this.quantity = quantity; 
+    }
+    
+    /**
+     * @return Total price
+     */
     public double getTotalPrice() {
         return product.getPrice() * quantity;
     }
     
-    @Override
-    public String toString() {
-        return product.getName() + " x" + quantity;
+    /**
+     * @param newNode The node to insert
+     */
+    public void insertAfter(DoublyCartNode newNode) {
+        if (newNode == null) return;
+        DoublyCartNode oldNext = this.next;
+        this.next = newNode;
+        newNode.prev = this;
+        if (oldNext != null) {
+            newNode.next = oldNext;
+            oldNext.prev = newNode;
+        }
     }
 }
