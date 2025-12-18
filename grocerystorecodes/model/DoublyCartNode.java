@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.model;
+package com.university.grocerystore.model;
 
 
 /**
@@ -102,3 +102,4 @@ public class DoublyCartNode {
         }
     }
 }
+
