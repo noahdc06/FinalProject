@@ -5,7 +5,6 @@ import com.university.grocerystore.model.FrozenFood;
 import com.university.grocerystore.model.CannedGood;
 import com.university.grocerystore.model.Snack;
 import com.university.grocerystore.model.GroceryProduct;
-import com.university.grocerystore.model.Perishable;
 
 /**
  * Concrete visitor implementation for calculating storage costs.
