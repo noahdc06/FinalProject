@@ -1,437 +1,306 @@
 package com.university.grocerystorecodes.model;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
-import java.time.LocalDate;
+import java.util.Iterator;
 
-public class ModelTests {
+class ModelTests {
     
-    private GroceryProduct apple;
-    private GroceryProduct soup;
-    private GroceryProduct pizza;
-    private GroceryProduct chips;
-    
-    @BeforeEach
-    void setUp() {
-        apple = new Produce("P001", "Apple", 1.99, 2024);
-        soup = new CannedGood("C001", "Tomato Soup", 2.49, 2024, 
-                              "Can", 400, "2025-12-31");
-        pizza = new FrozenFood("F001", "Frozen Pizza", 5.99, 2024,
-                              -18.0, "2024-06-30", "Box");
-        chips = new Snack("S001", "Potato Chips", 1.49, 2024,
-                         "Bag", 150, "2024-09-30");
-    }
-    
-    // ============ GroceryProduct Tests ============
+    // ============ GroceryProduct Hierarchy Tests ============
     
     @Test
-    void testGroceryProductBasics() {
-        assertEquals("P001", apple.getId());
-        assertEquals("Apple", apple.getName());
-        assertEquals(1.99, apple.getPrice(), 0.01);
-        assertEquals(2024, apple.getYear());
-        assertEquals("Produce", apple.getCategory());
+    void testGroceryProduct_AbstractClass() {
+        GroceryProduct product = new CannedGood("P001", "Soup", "Campbell's", 2.99, 2024, 12, "SOUP");
+        assertNotNull(product);
+        assertEquals("P001", product.getId());
+        assertEquals("Soup", product.getName());
+        assertEquals(2.99, product.getPrice(), 0.001);
     }
     
     @Test
-    void testProductEquality() {
-        GroceryProduct apple2 = new Produce("P001", "Apple", 1.99, 2024);
-        GroceryProduct differentApple = new Produce("P002", "Green Apple", 2.49, 2024);
+    void testCannedGood_Creation() {
+        CannedGood canned = new CannedGood("C001", "Beans", "Heinz", 1.49, 2024, 24, "VEGETABLES");
+        assertEquals("C001", canned.getId());
+        assertEquals("Beans", canned.getName());
+        assertEquals("VEGETABLES", canned.getType());
+        assertEquals(24, canned.getShelfLifeMonths());
+    }
+    
+    @Test
+    void testFrozenFood_Creation() {
+        FrozenFood frozen = new FrozenFood("F001", "Pizza", "DiGiorno", 8.99, 2024, 6, "PIZZA");
+        assertEquals("F001", frozen.getId());
+        assertEquals("PIZZA", frozen.getType());
+        assertTrue(frozen instanceof Perishable);
+    }
+    
+    @Test
+    void testProduce_Creation() {
+        Produce produce = new Produce("V001", "Apples", "Organic", 3.99, 2024, 7, "FRUIT");
+        assertEquals("V001", produce.getId());
+        assertEquals("FRUIT", produce.getType());
+        assertTrue(produce instanceof Perishable);
+    }
+    
+    @Test
+    void testSnack_Creation() {
+        Snack snack = new Snack("S001", "Chips", "Lays", 1.99, 2024, 9, "CHIPS");
+        assertEquals("S001", snack.getId());
+        assertEquals("CHIPS", snack.getType());
+        assertEquals(9, snack.getShelfLifeMonths());
+    }
+    
+    @Test
+    void testPerishable_Interface() {
+        FrozenFood frozen = new FrozenFood("F001", "Ice Cream", "Ben & Jerry's", 5.99, 2024, 3, "DESSERT");
+        Produce produce = new Produce("V001", "Bananas", "Chiquita", 0.99, 2024, 5, "FRUIT");
         
-        assertEquals(apple, apple2);
-        assertNotEquals(apple, differentApple);
-        assertEquals(apple.hashCode(), apple2.hashCode());
-    }
-    
-    @Test
-    void testPriceValidation() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Produce("P999", "Test", -1.0, 2024);
-        });
-    }
-    
-    // ============ Produce Tests ============
-    
-    @Test
-    void testProduceSpecifics() {
-        Produce banana = new Produce("P002", "Banana", 0.99, 2024);
-        assertNotNull(banana);
-        assertEquals("Produce", banana.getCategory());
+        assertTrue(frozen.isPerishable());
+        assertTrue(produce.isPerishable());
         
-        // Test Produce-specific methods
-        assertTrue(banana.getDisplayInfo().contains("Banana"));
-    }
-    
-    @Test
-    void testProduceWithOrganicFlag() {
-        Produce organicApple = new Produce("P003", "Organic Apple", 2.99, 2024, true);
-        assertTrue(organicApple.isOrganic());
-        
-        Produce regularApple = new Produce("P004", "Regular Apple", 1.99, 2024, false);
-        assertFalse(regularApple.isOrganic());
-    }
-    
-    // ============ CannedGood Tests ============
-    
-    @Test
-    void testCannedGood() {
-        assertEquals("Can", ((CannedGood) soup).getContainerType());
-        assertEquals(400, ((CannedGood) soup).getNetWeight());
-        assertEquals("2025-12-31", ((CannedGood) soup).getExpirationDate());
-    }
-    
-    @Test
-    void testCannedGoodExpired() {
-        CannedGood expiredSoup = new CannedGood("C002", "Expired Soup", 1.99, 2023,
-                                               "Can", 400, "2023-01-01");
-        assertTrue(expiredSoup.isExpired());
-        
-        CannedGood freshSoup = new CannedGood("C003", "Fresh Soup", 2.99, 2024,
-                                             "Can", 400, "2025-12-31");
-        assertFalse(freshSoup.isExpired());
-    }
-    
-    // ============ FrozenFood Tests ============
-    
-    @Test
-    void testFrozenFood() {
-        assertEquals(-18.0, ((FrozenFood) pizza).getStorageTemperature(), 0.01);
-        assertEquals("2024-06-30", ((FrozenFood) pizza).getExpirationDate());
-        assertEquals("Box", ((FrozenFood) pizza).getPackaging());
-    }
-    
-    @Test
-    void testFrozenFoodTemperatureValidation() {
-        // Temperature too warm for frozen food
-        assertThrows(IllegalArgumentException.class, () -> {
-            new FrozenFood("F002", "Ice Cream", 3.99, 2024,
-                          0.0, "2024-12-31", "Tub"); // 0°C is too warm
-        });
-        
-        // Temperature too cold
-        assertThrows(IllegalArgumentException.class, () -> {
-            new FrozenFood("F003", "Ice", 1.99, 2024,
-                          -100.0, "2024-12-31", "Bag"); // -100°C unrealistic
-        });
-    }
-    
-    // ============ Snack Tests ============
-    
-    @Test
-    void testSnack() {
-        assertEquals("Bag", ((Snack) chips).getPackagingType());
-        assertEquals(150, ((Snack) chips).getNetWeight());
-        assertEquals("2024-09-30", ((Snack) chips).getExpirationDate());
-    }
-    
-    @Test
-    void testSnackNutrition() {
-        Snack healthySnack = new Snack("S002", "Granola Bar", 1.99, 2024,
-                                      "Wrapper", 50, "2024-12-31", 150, 5, 3, 22);
-        
-        assertEquals(150, healthySnack.getCalories());
-        assertEquals(5, healthySnack.getProteinGrams());
-        assertEquals(3, healthySnack.getFatGrams());
-        assertEquals(22, healthySnack.getCarbGrams());
-    }
-    
-    // ============ Perishable Interface Tests ============
-    
-    @Test
-    void testPerishableInterface() {
-        // All perishable products should implement the interface
-        assertTrue(soup instanceof Perishable);
-        assertTrue(pizza instanceof Perishable);
-        assertTrue(chips instanceof Perishable);
-        
-        // Produce might or might not be perishable depending on implementation
-        // assertTrue(apple instanceof Perishable);
-    }
-    
-    @Test
-    void testDaysUntilExpiration() {
-        Perishable perishableSoup = (Perishable) soup;
-        long days = perishableSoup.getDaysUntilExpiration();
-        assertTrue(days > 0, "Fresh soup should have positive days until expiration");
+        assertTrue(frozen.getExpirationYear() > 2024);
+        assertTrue(produce.getExpirationYear() > 2024);
     }
     
     // ============ GroceryItem Tests ============
     
     @Test
-    void testGroceryItem() {
-        GroceryItem item = new GroceryItem("GI001", "Generic Item", 2.99, "Misc", 3);
-        
-        assertEquals("GI001", item.getId());
-        assertEquals("Generic Item", item.getName());
-        assertEquals(2.99, item.getPrice(), 0.01);
-        assertEquals("Misc", item.getCategory());
-        assertEquals(3, item.getQuantity());
-        
-        double totalPrice = item.getTotalPrice();
-        assertEquals(8.97, totalPrice, 0.01); // 2.99 * 3
+    void testGroceryItem_Creation() {
+        GroceryItem item = new GroceryItem("I001", "Milk", "DairyCo", 2.99, 2024, 2025);
+        assertEquals("I001", item.getSku());
+        assertEquals("Milk", item.getName());
+        assertEquals(2.99, item.getPrice(), 0.001);
+        assertEquals(2024, item.getProductionYear());
+        assertEquals(2025, item.getExpirationYear());
     }
     
     @Test
-    void testGroceryItemQuantityValidation() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new GroceryItem("GI002", "Test", 1.0, "Test", 0);
-        });
+    void testGroceryItem_Expired() {
+        GroceryItem expired = new GroceryItem("E001", "Old Milk", "Brand", 1.99, 2020, 2021);
+        GroceryItem fresh = new GroceryItem("F001", "Fresh Milk", "Brand", 2.99, 2024, 2025);
         
-        assertThrows(IllegalArgumentException.class, () -> {
-            new GroceryItem("GI003", "Test", 1.0, "Test", -5);
-        });
+        assertTrue(expired.isExpired());
+        assertFalse(fresh.isExpired());
     }
     
-    // ============ Doubly Linked List Cart Tests ============
+    @Test
+    void testGroceryItem_ShelfLife() {
+        GroceryItem item = new GroceryItem("L001", "Cereal", "Brand", 3.99, 2023, 2025);
+        assertEquals(2, item.getShelfLifeYears());
+    }
+    
+    // ============ DoublyCartNode Tests ============
     
     @Test
-    void testDoublyCartNode() {
-        DoublyCartNode node = new DoublyCartNode(apple, 3);
+    void testDoublyCartNode_Creation() {
+        GroceryProduct product = new CannedGood("P001", "Soup", "Brand", 2.99, 2024, 12, "SOUP");
+        DoublyCartNode node = new DoublyCartNode(product, 3);
         
-        assertEquals(apple, node.getProduct());
+        assertEquals(product, node.getProduct());
         assertEquals(3, node.getQuantity());
         assertNull(node.getNext());
         assertNull(node.getPrev());
-        assertEquals(5.97, node.getTotalPrice(), 0.01); // 1.99 * 3
-        
-        node.setQuantity(5);
-        assertEquals(5, node.getQuantity());
-        
-        node.incrementQuantity(2);
-        assertEquals(7, node.getQuantity());
-        
-        assertTrue(node.decrementQuantity(3));
-        assertEquals(4, node.getQuantity());
     }
     
     @Test
-    void testDoublyCartNodeLinks() {
-        DoublyCartNode node1 = new DoublyCartNode(apple, 2);
-        DoublyCartNode node2 = new DoublyCartNode(soup, 1);
+    void testDoublyCartNode_DefaultQuantity() {
+        GroceryProduct product = new CannedGood("P001", "Soup", "Brand", 2.99, 2024, 12, "SOUP");
+        DoublyCartNode node = new DoublyCartNode(product);
         
-        node1.setNext(node2);
-        node2.setPrev(node1);
+        assertEquals(1, node.getQuantity());
+    }
+    
+    @Test
+    void testDoublyCartNode_InvalidCreation() {
+        GroceryProduct product = new CannedGood("P001", "Soup", "Brand", 2.99, 2024, 12, "SOUP");
+        
+        assertThrows(IllegalArgumentException.class, () -> new DoublyCartNode(null, 1));
+        assertThrows(IllegalArgumentException.class, () -> new DoublyCartNode(product, 0));
+        assertThrows(IllegalArgumentException.class, () -> new DoublyCartNode(product, -1));
+    }
+    
+    @Test
+    void testDoublyCartNode_InsertAfter() {
+        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Item2", "Brand", 2.99, 2024, 12, "TYPE");
+        GroceryProduct p3 = new CannedGood("P3", "Item3", "Brand", 3.99, 2024, 12, "TYPE");
+        
+        DoublyCartNode node1 = new DoublyCartNode(p1);
+        DoublyCartNode node2 = new DoublyCartNode(p2);
+        DoublyCartNode node3 = new DoublyCartNode(p3);
+        
+        node1.insertAfter(node2);
+        node2.insertAfter(node3);
         
         assertEquals(node2, node1.getNext());
         assertEquals(node1, node2.getPrev());
-        assertTrue(node1.hasNext());
-        assertFalse(node1.hasPrev());
-        assertFalse(node2.hasNext());
-        assertTrue(node2.hasPrev());
+        assertEquals(node3, node2.getNext());
+        assertEquals(node2, node3.getPrev());
     }
     
+    // ============ DoublyLinkedListCart Tests ============
+    
     @Test
-    void testDoublyLinkedListCartBasicOperations() {
+    void testDoublyLinkedListCart_Empty() {
         DoublyLinkedListCart cart = new DoublyLinkedListCart();
         
         assertTrue(cart.isEmpty());
         assertEquals(0, cart.size());
-        assertEquals(0.0, cart.getTotal(), 0.01);
+        assertNull(cart.getFirst());
+        assertNull(cart.getLast());
+    }
+    
+    @Test
+    void testDoublyLinkedListCart_AddFirst() {
+        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "First", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Second", "Brand", 2.99, 2024, 12, "TYPE");
         
-        cart.add(apple, 3);
-        assertFalse(cart.isEmpty());
+        cart.addFirst(p1);
+        cart.addFirst(p2, 2);
+        
+        assertEquals(2, cart.size());
+        assertEquals("Second", cart.getFirst().getProduct().getName());
+        assertEquals("First", cart.getLast().getProduct().getName());
+    }
+    
+    @Test
+    void testDoublyLinkedListCart_AddLast() {
+        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "First", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Second", "Brand", 2.99, 2024, 12, "TYPE");
+        
+        cart.addLast(p1);
+        cart.addLast(p2, 3);
+        
+        assertEquals(2, cart.size());
+        assertEquals("First", cart.getFirst().getProduct().getName());
+        assertEquals("Second", cart.getLast().getProduct().getName());
+    }
+    
+    @Test
+    void testDoublyLinkedListCart_RemoveFirst() {
+        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "First", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Second", "Brand", 2.99, 2024, 12, "TYPE");
+        
+        cart.addLast(p1);
+        cart.addLast(p2);
+        
+        GroceryProduct removed = cart.removeFirst();
+        assertEquals("First", removed.getName());
         assertEquals(1, cart.size());
-        assertEquals(5.97, cart.getTotal(), 0.01); // 1.99 * 3
+        assertEquals("Second", cart.getFirst().getProduct().getName());
+    }
+    
+    @Test
+    void testDoublyLinkedListCart_RemoveLast() {
+        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "First", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Second", "Brand", 2.99, 2024, 12, "TYPE");
         
-        cart.add(soup, 2);
+        cart.addLast(p1);
+        cart.addLast(p2);
+        
+        GroceryProduct removed = cart.removeLast();
+        assertEquals("Second", removed.getName());
+        assertEquals(1, cart.size());
+        assertEquals("First", cart.getLast().getProduct().getName());
+    }
+    
+    @Test
+    void testDoublyLinkedListCart_RemoveById() {
+        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Item2", "Brand", 2.99, 2024, 12, "TYPE");
+        GroceryProduct p3 = new CannedGood("P3", "Item3", "Brand", 3.99, 2024, 12, "TYPE");
+        
+        cart.addLast(p1);
+        cart.addLast(p2);
+        cart.addLast(p3);
+        
+        GroceryProduct removed = cart.remove("P2");
+        assertEquals("Item2", removed.getName());
         assertEquals(2, cart.size());
-        assertEquals(10.95, cart.getTotal(), 0.01); // 5.97 + (2.49 * 2)
+        assertFalse(cart.contains("P2"));
+        assertTrue(cart.contains("P1"));
+        assertTrue(cart.contains("P3"));
     }
     
     @Test
-    void testDoublyLinkedListCartAddFirst() {
+    void testDoublyLinkedListCart_Contains() {
         DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
         
-        cart.add(apple, 2);      // Added first
-        cart.addFirst(soup, 1);  // Should be new first
+        cart.addLast(p1);
         
-        assertEquals(soup, cart.getProduct(0));
-        assertEquals(apple, cart.getProduct(1));
+        assertTrue(cart.contains("P1"));
+        assertFalse(cart.contains("P999"));
     }
     
     @Test
-    void testDoublyLinkedListCartRemove() {
+    void testDoublyLinkedListCart_Clear() {
         DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Item2", "Brand", 2.99, 2024, 12, "TYPE");
         
-        cart.add(apple, 2);
-        cart.add(soup, 1);
-        cart.add(pizza, 1);
-        
-        assertEquals(3, cart.size());
-        
-        boolean removed = cart.remove("C001"); // Remove soup
-        assertTrue(removed);
-        assertEquals(2, cart.size());
-        assertEquals(1.99 * 2 + 5.99, cart.getTotal(), 0.01);
-        
-        // Remove non-existent product
-        assertFalse(cart.remove("NONEXISTENT"));
-    }
-    
-    @Test
-    void testDoublyLinkedListCartUpdateQuantity() {
-        DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        
-        cart.add(apple, 2);
-        assertEquals(3.98, cart.getTotal(), 0.01);
-        
-        boolean updated = cart.updateQuantity("P001", 5);
-        assertTrue(updated);
-        assertEquals(9.95, cart.getTotal(), 0.01); // 1.99 * 5
-        
-        // Update non-existent product
-        assertFalse(cart.updateQuantity("NONEXISTENT", 10));
-    }
-    
-    @Test
-    void testDoublyLinkedListCartTraversal() {
-        DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        
-        cart.add(apple, 1);
-        cart.add(soup, 2);
-        cart.add(pizza, 1);
-        
-        // Test forward iteration
-        int forwardCount = 0;
-        for (DoublyCartNode node : cart) {
-            forwardCount++;
-            assertNotNull(node.getProduct());
-        }
-        assertEquals(3, forwardCount);
-        
-        // Test backward iteration
-        int backwardCount = 0;
-        java.util.Iterator<DoublyCartNode> reverseIterator = cart.reverseIterator();
-        while (reverseIterator.hasNext()) {
-            backwardCount++;
-            reverseIterator.next();
-        }
-        assertEquals(3, backwardCount);
-    }
-    
-    @Test
-    void testDoublyLinkedListCartReverse() {
-        DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        
-        cart.add(apple, 1);
-        cart.add(soup, 1);
-        cart.add(pizza, 1);
-        
-        GroceryProduct firstBefore = cart.getProduct(0);
-        GroceryProduct lastBefore = cart.getProduct(2);
-        
-        cart.reverse();
-        
-        assertEquals(pizza, cart.getProduct(0));
-        assertEquals(soup, cart.getProduct(1));
-        assertEquals(apple, cart.getProduct(2));
-    }
-    
-    @Test
-    void testDoublyLinkedListCartClear() {
-        DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        
-        cart.add(apple, 3);
-        cart.add(soup, 2);
+        cart.addLast(p1);
+        cart.addLast(p2);
         
         assertEquals(2, cart.size());
-        assertTrue(cart.getTotal() > 0);
-        
         cart.clear();
-        
-        assertTrue(cart.isEmpty());
         assertEquals(0, cart.size());
-        assertEquals(0.0, cart.getTotal(), 0.01);
+        assertTrue(cart.isEmpty());
+        assertNull(cart.getFirst());
+        assertNull(cart.getLast());
     }
     
     @Test
-    void testDoublyLinkedListCartFindAndContains() {
+    void testDoublyLinkedListCart_Iterator() {
+        DoublyLinkedListCart cart = new DoublyLinkedListCart();
+        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
+        GroceryProduct p2 = new CannedGood("P2", "Item2", "Brand", 2.99, 2024, 12, "TYPE");
+        
+        cart.addLast(p1);
+        cart.addLast(p2);
+        
+        int count = 0;
+        for (DoublyCartNode node : cart) {
+            assertNotNull(node);
+            count++;
+        }
+        assertEquals(2, count);
+    }
+    
+    @Test
+    void testDoublyLinkedListCart_IteratorEmpty() {
         DoublyLinkedListCart cart = new DoublyLinkedListCart();
         
-        cart.add(apple, 2);
-        cart.add(soup, 1);
-        
-        assertTrue(cart.contains("P001"));
-        assertTrue(cart.contains("C001"));
-        assertFalse(cart.contains("NONEXISTENT"));
-        
-        assertEquals(2, cart.getQuantity("P001"));
-        assertEquals(1, cart.getQuantity("C001"));
-        assertEquals(0, cart.getQuantity("NONEXISTENT"));
+        int count = 0;
+        for (DoublyCartNode node : cart) {
+            count++;
+        }
+        assertEquals(0, count);
     }
     
+    // ============ Edge Cases ============
+    
     @Test
-    void testDoublyLinkedListCartIndexOutOfBounds() {
+    void testRemoveFromEmptyCart() {
         DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        cart.add(apple, 1);
         
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            cart.getProduct(-1);
-        });
-        
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            cart.getProduct(5);
-        });
+        assertNull(cart.removeFirst());
+        assertNull(cart.removeLast());
+        assertNull(cart.remove("INVALID"));
     }
     
     @Test
-    void testDoublyLinkedListCartToString() {
+    void testRemoveNonExistentId() {
         DoublyLinkedListCart cart = new DoublyLinkedListCart();
-        cart.add(apple, 2);
-        cart.add(soup, 1);
+        GroceryProduct p1 = new CannedGood("P1", "Item1", "Brand", 1.99, 2024, 12, "TYPE");
+        cart.addLast(p1);
         
-        String str = cart.toString();
-        assertTrue(str.contains("Apple"));
-        assertTrue(str.contains("Tomato Soup"));
-        assertTrue(str.contains("Total:"));
+        assertNull(cart.remove("NONEXISTENT"));
+        assertEquals(1, cart.size());
     }
-    
-    // ============ Edge Cases and Error Scenarios ============
-    
-    @Test
-    void testInvalidProductCreation() {
-        // Invalid ID
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Produce(null, "Apple", 1.99, 2024);
-        });
-        
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Produce("", "Apple", 1.99, 2024);
-        });
-        
-        // Invalid name
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Produce("P001", null, 1.99, 2024);
-        });
-        
-        // Invalid year
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Produce("P001", "Apple", 1.99, 1800); // Too old
-        });
-    }
-    
-    @Test
-    void testProductDiscount() {
-        GroceryProduct discountedApple = new Produce("P005", "Discounted Apple", 2.0, 2024);
-    }
-    
-    @Test
-    void testProductSerialization() {
-        // Test toString() for all product types
-        assertNotNull(apple.toString());
-        assertNotNull(soup.toString());
-        assertNotNull(pizza.toString());
-        assertNotNull(chips.toString());
-        
-        // Should contain basic product info
-        assertTrue(apple.toString().contains("Apple"));
-        assertTrue(apple.toString().contains("1.99"));
-    }
-    
-    @Test
-    void testModelImmutability() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-        });
-    }
-}
+}V
