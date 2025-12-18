@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.service;
+package com.university.grocerystore.service;
 
 import org.junit.jupiter.api.Test;
 import com.university.grocerystore.model.*;
