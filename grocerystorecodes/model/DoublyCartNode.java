@@ -13,13 +13,14 @@ package com.university.grocerystorecodes.model;
  * Space Complexity: O(n) where n = number of items in cart
  * 
  */
-   
-package com.university.grocerystorecodes.datastructures;
 
-import com.university.grocerystorecodes.model.GroceryProduct;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Doubly linked list node for shopping cart containing grocery products.
+ * Each node holds a product with quantity and maintains references to adjacent nodes.
+ */
 public class DoublyCartNode {
     private final GroceryProduct product;
     private DoublyCartNode next;
@@ -27,8 +28,10 @@ public class DoublyCartNode {
     private int quantity;
     
     /**
-     * @param product The grocery product
-     * @param quantity The quantity
+     * Constructs a new cart node with specified product and quantity.
+     * @param product The grocery product to store in this node
+     * @param quantity The quantity of the product (must be positive)
+     * @throws IllegalArgumentException if product is null or quantity ≤ 0
      */
     public DoublyCartNode(GroceryProduct product, int quantity) {
         if (product == null || quantity <= 0) {
@@ -41,64 +44,52 @@ public class DoublyCartNode {
     }
     
     /**
-     * @param product The grocery product
+     * Constructs a new cart node with product (default quantity = 1).
+     * @param product The grocery product to store in this node
      */
     public DoublyCartNode(GroceryProduct product) {
         this(product, 1);
     }
     
     /**
-     * @return The grocery product
+     * @return The grocery product stored in this node
      */
     public GroceryProduct getProduct() { 
         return product; 
     }
     
     /**
-     * @return The next node
+     * @return The next node in the linked list
      */
     public DoublyCartNode getNext() { 
         return next; 
     }
     
     /**
-     * @param next The next node
+     * @param next The node to set as the next node
      */
     public void setNext(DoublyCartNode next) { 
         this.next = next; 
     }
     
     /**
-     * @return The previous node
+     * @return The previous node in the linked list
      */
     public DoublyCartNode getPrev() { 
         return prev; 
     }
     
     /**
-     * @param prev The previous node
+     * @param prev The node to set as the previous node
      */
     public void setPrev(DoublyCartNode prev) { 
         this.prev = prev; 
     }
     
+  
     /**
-     * @return The quantity
-     */
-    public int getQuantity() { 
-        return quantity; 
-    }
-    
-    /**
-     * @param quantity The new quantity
-     */
-    public void setQuantity(int quantity) { 
-        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
-        this.quantity = quantity; 
-    }
-    
-    /**
-     * @param newNode The node to insert
+     * Inserts a new node after this node in the linked list.
+     * @param newNode The node to insert after this node
      */
     public void insertAfter(DoublyCartNode newNode) {
         if (newNode == null) return;
