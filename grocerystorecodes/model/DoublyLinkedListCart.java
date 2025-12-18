@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.model;
+package com.university.grocerystore.model;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -222,3 +222,4 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         };
     }
 }
+
