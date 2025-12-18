@@ -1,4 +1,4 @@
-package com.university.grocerystorecodes.model;
+package com.university.grocerystore.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
