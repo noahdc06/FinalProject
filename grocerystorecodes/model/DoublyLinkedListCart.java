@@ -3,14 +3,6 @@ package com.university.grocerystore.model;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- * Complete doubly linked list implementation for shopping cart.
- * Supports bidirectional traversal and efficient node removal.
- */
-package com.university.grocerystorecodes.model;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Doubly linked list implementation for a shopping cart containing grocery products.
@@ -222,4 +214,5 @@ public class DoublyLinkedListCart implements Iterable<DoublyCartNode> {
         };
     }
 }
+
 
